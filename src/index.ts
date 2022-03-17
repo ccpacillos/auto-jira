@@ -4,5 +4,10 @@ import getSheet from './get-sheet.js';
   const sheet = await getSheet();
   const rows = await sheet.getRows();
 
-  rows.map((row) => console.log(row.Card));
+  await sheet.loadCells();
+
+  rows.map((row) => {
+    const cell = sheet.getCell(row.rowIndex, 2);
+    console.log(cell.value);
+  });
 })();
