@@ -12,9 +12,9 @@ import getSheet from './get-sheet.js';
     rows,
     async (row) => {
       const [issueLink, issueStatus, issueAssignee] = [
-        sheet.getCell(row.rowIndex, 0),
-        sheet.getCell(row.rowIndex, 2),
-        sheet.getCell(row.rowIndex, 3),
+        sheet.getCell(row.rowIndex - 1, 0),
+        sheet.getCell(row.rowIndex - 1, 2),
+        sheet.getCell(row.rowIndex - 1, 3),
       ];
 
       if (!issueLink.value) return;
@@ -31,7 +31,7 @@ import getSheet from './get-sheet.js';
         },
       } = await getIssueDetails(issueId);
 
-      if (issueStatus.value !== status && issueAssignee.value !== assignee) {
+      if (issueStatus.value !== status || issueAssignee.value !== assignee) {
         console.log(`Found issue to be updated: ${issueId}`);
         issueStatus.value = status;
         issueAssignee.value = assignee;
