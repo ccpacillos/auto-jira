@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import { GoogleSpreadsheet } from 'google-spreadsheet';
 import { loadJsonFile } from 'load-json-file';
 
-export default async function getSheet() {
+export default async function getSheet(title: string) {
   const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID);
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -12,7 +12,7 @@ export default async function getSheet() {
   );
 
   await doc.loadInfo();
-  const sheet = doc.sheetsById[process.env.GOOGLE_SHEET_ID || ''];
+  const sheet = doc.sheetsByTitle[title];
 
   return sheet;
 }
