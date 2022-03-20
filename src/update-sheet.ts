@@ -1,5 +1,6 @@
 import Bluebird from 'bluebird';
-import { map } from 'ramda';
+import { map, trim } from 'ramda';
+import assertIssueOnBoard from './assert-issue-on-board.js';
 import getDesignation from './get-designation.js';
 import getIssueDetails from './get-issue-details.js';
 import getSheet from './get-sheet.js';
@@ -20,22 +21,26 @@ export default async function updateSheet(title: string) {
         issueStatus,
         issueAssignee,
         issueDesignation,
+        issuePriority,
       ] = map((column: number) => sheet.getCell(index, column))([
-        0, 1, 2, 3, 4,
+        0, 1, 2, 3, 4, 5,
       ]);
 
       if (!issueLink.value) return;
 
       const regex = new RegExp(/^https.*\/(EU-.*)$/);
-      const [, issueId] = (issueLink.value as string).match(regex) || [];
+      const [, issueIdRaw] = (issueLink.value as string).match(regex) || [];
 
-      if (!issueId) return;
+      if (!issueIdRaw) return;
+
+      const issueId = trim(issueIdRaw);
 
       const {
         fields: {
           status: { name: status },
           assignee: { displayName: assignee, accountId },
           summary: title,
+          priority: { name: priority },
         },
       } = await getIssueDetails(issueId);
 
@@ -57,8 +62,14 @@ export default async function updateSheet(title: string) {
         issueDesignation.value = getDesignation(accountId) || '';
       }
 
-      await sheet.saveUpdatedCells();
+      if (issuePriority.value !== priority) {
+        issuePriority.value = priority;
+      }
+
+      await assertIssueOnBoard(issueId);
     },
     { concurrency: 5 },
   );
+
+  await sheet.saveUpdatedCells();
 }
