@@ -8,7 +8,7 @@ export default async function getSheet(title: string) {
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
   await doc.useServiceAccountAuth(
-    await loadJsonFile(path.join(__dirname, '../google-credentials.json')),
+    await loadJsonFile(path.join(__dirname, '../../google-credentials.json')),
   );
 
   await doc.loadInfo();

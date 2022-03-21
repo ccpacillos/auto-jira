@@ -4,8 +4,9 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "ts-node": "ts-node --files --transpile-only --esm",
-    "start:local": "env $(cat .env) npm run ts-node src/index"
+    "ts-node": "env $(cat .env) ts-node --files --transpile-only --esm",
+    "update-priorities": "npm run ts-node src/actions/update-priority-cards-sheet-details",
+    "update-week": "npm run ts-node src/actions/update-this-week-sheet-details && npm run ts-node src/actions/move-done-for-this-week"
   },
   "repository": {
     "type": "git",

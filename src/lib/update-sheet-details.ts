@@ -1,15 +1,16 @@
 import Bluebird from 'bluebird';
-import { map, trim } from 'ramda';
+import { map } from 'ramda';
 import assertIssueOnBoard from './assert-issue-on-board.js';
 import getDesignation from './get-designation.js';
 import getIssueDetails from './get-issue-details.js';
+import getIssueIdFromUrl from './get-issue-id-from-url.js';
 import getSheet from './get-sheet.js';
 
-export default async function updateSheet(title: string) {
+export default async function updateSheetDetails(title: string) {
   console.log(`Updating sheet: ${title}`);
   const sheet = await getSheet(title);
-  await sheet.loadCells();
   const rows = await sheet.getRows();
+  await sheet.loadCells();
 
   await Bluebird.map(
     rows,
@@ -28,12 +29,9 @@ export default async function updateSheet(title: string) {
 
       if (!issueLink.value) return;
 
-      const regex = new RegExp(/^https.*\/(EU-.*)$/);
-      const [, issueIdRaw] = (issueLink.value as string).match(regex) || [];
+      const issueId = getIssueIdFromUrl(issueLink.value.toString());
 
-      if (!issueIdRaw) return;
-
-      const issueId = trim(issueIdRaw);
+      if (!issueId) return;
 
       const {
         fields: {
