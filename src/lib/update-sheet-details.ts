@@ -6,7 +6,10 @@ import getIssueDetails from './get-issue-details.js';
 import getIssueIdFromUrl from './get-issue-id-from-url.js';
 import getSheet from './get-sheet.js';
 
-export default async function updateSheetDetails(title: string) {
+export default async function updateSheetDetails(
+  title: string,
+  assertCardsToBoard = false,
+) {
   console.log(`Updating sheet: ${title}`);
   const sheet = await getSheet(title);
   const rows = await sheet.getRows();
@@ -64,7 +67,9 @@ export default async function updateSheetDetails(title: string) {
         issuePriority.value = priority;
       }
 
-      await assertIssueOnBoard(issueId);
+      if (assertCardsToBoard) {
+        await assertIssueOnBoard(issueId);
+      }
     },
     { concurrency: 5 },
   );
