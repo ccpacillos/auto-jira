@@ -9,6 +9,7 @@ import getSheet from './get-sheet.js';
 export default async function updateSheetDetails(
   title: string,
   assertCardsToBoard = false,
+  updateSharedToClient = false,
 ) {
   console.log(`Updating sheet: ${title}`);
   const sheet = await getSheet(title);
@@ -26,8 +27,10 @@ export default async function updateSheetDetails(
         issueAssignee,
         issueDesignation,
         issuePriority,
+        issueType,
+        shared,
       ] = map((column: number) => sheet.getCell(index, column))([
-        0, 1, 2, 3, 4, 5,
+        0, 1, 2, 3, 4, 5, 6, 8,
       ]);
 
       if (!issueLink.value) return;
@@ -42,6 +45,7 @@ export default async function updateSheetDetails(
           assignee: { displayName: assignee, accountId },
           summary: title,
           priority: { name: priority },
+          issuetype: { name: type },
         },
       } = await getIssueDetails(issueId);
 
@@ -49,6 +53,9 @@ export default async function updateSheetDetails(
 
       if (issueStatus.value !== status) {
         issueStatus.value = status;
+        if (status === 'RFT - PROD' && updateSharedToClient) {
+          shared.value = 'No';
+        }
       }
 
       if (issueAssignee.value !== assignee) {
@@ -65,6 +72,10 @@ export default async function updateSheetDetails(
 
       if (issuePriority.value !== priority) {
         issuePriority.value = priority;
+      }
+
+      if (issueType.value !== type) {
+        issueType.value = type;
       }
 
       if (assertCardsToBoard) {

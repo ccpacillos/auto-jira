@@ -6,7 +6,7 @@
   "scripts": {
     "ts-node": "env $(cat .env) ts-node --files --transpile-only --esm",
     "update-priorities": "npm run ts-node src/actions/update-priority-cards-sheet-details",
-    "update-week": "npm run ts-node src/actions/update-this-week-sheet-details && npm run ts-node src/actions/move-done-for-this-week"
+    "update-week": "npm run ts-node src/actions/update-this-week-sheet-details"
   },
   "repository": {
     "type": "git",
@@ -41,6 +41,7 @@
     "google-auth-library": "^7.14.0",
     "google-spreadsheet": "^3.2.0",
     "load-json-file": "^7.0.1",
-    "ramda": "^0.28.0"
+    "ramda": "^0.28.0",
+    "webdav": "^4.8.0"
   }
 }
