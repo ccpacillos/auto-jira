@@ -1,7 +1,6 @@
 import Bluebird from 'bluebird';
-import { map } from 'ramda';
+import { includes, map } from 'ramda';
 import assertIssueOnBoard from './assert-issue-on-board.js';
-import getDesignation from './get-designation.js';
 import getIssueDetails from './get-issue-details.js';
 import getIssueIdFromUrl from './get-issue-id-from-url.js';
 import getSheet from './get-sheet.js';
@@ -42,10 +41,11 @@ export default async function updateSheetDetails(
       const {
         fields: {
           status: { name: status },
-          assignee: { displayName: assignee, accountId },
+          assignee,
           summary: title,
           priority: { name: priority },
           issuetype: { name: type },
+          labels,
         },
       } = await getIssueDetails(issueId);
 
@@ -58,8 +58,10 @@ export default async function updateSheetDetails(
         }
       }
 
-      if (issueAssignee.value !== assignee) {
-        issueAssignee.value = assignee;
+      const assigneeDisplayName = assignee?.displayName || 'Unassigned';
+
+      if (issueAssignee.value !== assigneeDisplayName) {
+        issueAssignee.value = assigneeDisplayName;
       }
 
       if (!issueTitle.value) {
@@ -67,7 +69,17 @@ export default async function updateSheetDetails(
       }
 
       if (!issueDesignation.value) {
-        issueDesignation.value = getDesignation(accountId) || '';
+        if (includes('Frontend', labels)) {
+          issueDesignation.value = 'FE';
+        }
+
+        if (includes('Backend', labels)) {
+          issueDesignation.value = 'BE';
+        }
+
+        if (includes('QA', labels)) {
+          issueDesignation.value = 'QA';
+        }
       }
 
       if (issuePriority.value !== priority) {
