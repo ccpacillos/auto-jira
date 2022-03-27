@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "ts-node": "env $(cat .env) ts-node --files --transpile-only --esm",
-    "update-priorities": "npm run ts-node src/actions/update-priority-cards-sheet-details",
-    "update-week": "npm run ts-node src/actions/update-this-week-sheet-details"
+    "update-current": "npm run ts-node src/actions/update-current",
+    "update-stats": "npm run ts-node src/actions/update-stats"
   },
   "repository": {
     "type": "git",

@@ -23,10 +23,10 @@ export default async function updateSheetDetails(
         issueLink,
         issueTitle,
         issueStatus,
-        issueAssignee,
-        issueDesignation,
-        issuePriority,
         issueType,
+        issuePriority,
+        issueDesignation,
+        issueAssignee,
         shared,
       ] = map((column: number) => sheet.getCell(index, column))([
         0, 1, 2, 3, 4, 5, 6, 8,
