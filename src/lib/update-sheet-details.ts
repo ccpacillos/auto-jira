@@ -94,7 +94,7 @@ export default async function updateSheetDetails(
         await assertIssueOnBoard(issueId);
       }
     },
-    { concurrency: 5 },
+    { concurrency: 10 },
   );
 
   await sheet.saveUpdatedCells();
