@@ -1,4 +1,4 @@
-import { differenceWith, equals, filter, groupBy, map } from 'ramda';
+import { differenceWith, equals, filter, groupBy, includes, map } from 'ramda';
 import getSheet from '../lib/get-sheet.js';
 import jiraAPI from '../lib/jira-api.js';
 
@@ -53,14 +53,10 @@ const developmentLoadFilter = `
     | 'UAT'
     | 'Ready for PROD Deploy'
     | 'RFT - PROD'
-    | 'RFT - PROD Fail';
+    | 'RFT - PROD Fail'
+    | 'To Do';
 
-  const currentIssues = differenceWith(
-    (issueA: { key: string }, issueB: { key: string }) =>
-      equals(issueA.key, issueB.key),
-    allIssues,
-    backlogIssues,
-  ) as {
+  type Issue = {
     key: string;
     fields: {
       summary: string;
@@ -76,7 +72,14 @@ const developmentLoadFilter = `
         name: string;
       };
     };
-  }[];
+  };
+
+  const currentIssues = differenceWith(
+    (issueA: { key: string }, issueB: { key: string }) =>
+      equals(issueA.key, issueB.key),
+    allIssues,
+    backlogIssues,
+  ) as Issue[];
 
   const groups = groupBy((issue) => issue.fields.status.name, currentIssues);
 
@@ -91,10 +94,23 @@ const developmentLoadFilter = `
 
   await Promise.all([stats.loadCells(), thisWeek.loadCells()]);
 
-  const doneCount = filter(
+  const doneRows = filter(
     (row) => thisWeek.getCell(row.rowIndex - 1, 2)?.value === 'Done',
     thisWeekRows,
-  ).length;
+  );
+  const feDone = filter(
+    (row) =>
+      thisWeek.getCell(row.rowIndex - 1, 2)?.value === 'Done' &&
+      thisWeek.getCell(row.rowIndex - 1, 5)?.value === 'FE',
+    thisWeekRows,
+  );
+
+  const beDone = filter(
+    (row) =>
+      thisWeek.getCell(row.rowIndex - 1, 2)?.value === 'Done' &&
+      thisWeek.getCell(row.rowIndex - 1, 5)?.value === 'BE',
+    thisWeekRows,
+  );
 
   map((row) => {
     const [status, count] = [
@@ -103,19 +119,45 @@ const developmentLoadFilter = `
     ];
 
     if (status.value === 'Done') {
-      count.value = doneCount;
+      count.value = `${doneRows.length} (BE - ${beDone.length}, FE - ${feDone.length})`;
 
       return;
     }
 
-    count.value = groups[status.value as Status]?.length || 0;
+    const group = groups[status.value as Status] || [];
+
+    const fe = filter(
+      (item: Issue) => includes('Frontend', item.fields.labels),
+      group,
+    );
+
+    const be = filter(
+      (item: Issue) => includes('Backend', item.fields.labels),
+      group,
+    );
+
+    count.value = `${group.length} (BE - ${be.length}, FE - ${fe.length})`;
   }, statsRows);
 
   await stats.saveUpdatedCells();
 
   console.log(
     map(
-      (key) => `${key}: ${groups[key]?.length || 0}`,
+      (key) => {
+        const fe = filter(
+          (item: Issue) => includes('Frontend', item.fields.labels),
+          groups[key] || [],
+        );
+
+        const be = filter(
+          (item: Issue) => includes('Backend', item.fields.labels),
+          groups[key] || [],
+        );
+
+        return `${key}: ${groups[key]?.length || 0} (BE - ${be.length}, FE - ${
+          fe.length
+        })`;
+      },
       [
         'To Do',
         'In Progress',
@@ -131,5 +173,7 @@ const developmentLoadFilter = `
       ],
     ).join('\n'),
   );
-  console.log(`Done: ${doneCount}`);
+  console.log(
+    `Done: ${doneRows.length} (BE - ${beDone.length}, FE - ${feDone.length})`,
+  );
 })();

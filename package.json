@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "ts-node": "env $(cat .env) ts-node --files --transpile-only --esm",
-    "update-current": "npm run ts-node src/actions/update-current",
+    "update-this-week": "npm run ts-node src/actions/update-this-week",
     "update-stats": "npm run ts-node src/actions/update-stats"
   },
   "repository": {
@@ -42,6 +42,7 @@
     "google-spreadsheet": "^3.2.0",
     "load-json-file": "^7.0.1",
     "ramda": "^0.28.0",
+    "slackify-markdown": "^4.3.1",
     "webdav": "^4.8.0"
   }
 }
