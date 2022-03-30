@@ -1,5 +1,5 @@
 import Bluebird from 'bluebird';
-import { includes, map } from 'ramda';
+import { findIndex, includes, map } from 'ramda';
 import assertIssueOnBoard from './assert-issue-on-board.js';
 import getIssueDetails from './get-issue-details.js';
 import getIssueIdFromUrl from './get-issue-id-from-url.js';
@@ -15,6 +15,21 @@ export default async function updateSheetDetails(
   const rows = await sheet.getRows();
   await sheet.loadCells();
 
+  const statusOrder = [
+    'To Do',
+    'In Progress',
+    'In Review',
+    'Merge In Dev',
+    'RFT',
+    'QA In Progress',
+    'QA Failed',
+    'UAT',
+    'Ready for PROD Deploy',
+    'RFT - PROD',
+    'RFT - PROD Fail',
+    'Done',
+  ];
+
   await Bluebird.map(
     rows,
     async (row) => {
@@ -27,9 +42,9 @@ export default async function updateSheetDetails(
         issuePriority,
         issueDesignation,
         issueAssignee,
-        shared,
+        issueStatusOrder,
       ] = map((column: number) => sheet.getCell(index, column))([
-        0, 1, 2, 3, 4, 5, 6, 8,
+        0, 1, 2, 3, 4, 5, 6, 7,
       ]);
 
       if (!issueLink.value) return;
@@ -53,10 +68,12 @@ export default async function updateSheetDetails(
 
       if (issueStatus.value !== status) {
         issueStatus.value = status;
-        if (status === 'RFT - PROD' && updateSharedToClient) {
-          shared.value = 'No';
-        }
       }
+
+      issueStatusOrder.value = findIndex(
+        (item: string) => item === status,
+        statusOrder,
+      );
 
       const assigneeDisplayName = assignee?.displayName || 'Unassigned';
 
@@ -94,7 +111,7 @@ export default async function updateSheetDetails(
         await assertIssueOnBoard(issueId);
       }
     },
-    { concurrency: 10 },
+    { concurrency: 5 },
   );
 
   await sheet.saveUpdatedCells();
