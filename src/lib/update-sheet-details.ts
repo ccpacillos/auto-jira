@@ -86,6 +86,7 @@ export default async function updateSheetDetails(
       }
 
       if (!issueDesignation.value) {
+        issueDesignation.value = '';
         if (includes('Frontend', labels)) {
           issueDesignation.value = 'FE';
         }

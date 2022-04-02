@@ -6,7 +6,9 @@
   "scripts": {
     "ts-node": "env $(cat .env) ts-node --files --transpile-only --esm",
     "update-up-next": "npm run ts-node src/actions/update-up-next",
-    "update-this-week": "npm run ts-node src/actions/update-this-week",
+    "update-stats": "npm run ts-node src/actions/update-stats",
+    "update-current": "npm run ts-node src/actions/update-current",
+    "update-current-stats": "npm run ts-node src/actions/update-current-stats",
     "update-done": "npm run ts-node src/actions/update-done"
   },
   "repository": {

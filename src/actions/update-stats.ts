@@ -1,7 +1,6 @@
 import { differenceWith, equals, filter, groupBy, includes, map } from 'ramda';
 import getSheet from '../lib/get-sheet.js';
 import jiraAPI from '../lib/jira-api.js';
-import updateSheetDetails from '../lib/update-sheet-details.js';
 
 const developmentLoadFilter = `
   status = "In Progress"
@@ -18,8 +17,6 @@ const developmentLoadFilter = `
 `;
 
 (async function () {
-  await updateSheetDetails('This Week', true);
-
   console.log('Getting stats...');
   const [
     {
