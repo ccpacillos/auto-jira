@@ -85,8 +85,8 @@ const developmentLoadFilter = `
   const groups = groupBy((issue) => issue.fields.status.name, currentIssues);
 
   const [stats, thisWeek] = await Promise.all([
-    getSheet('Stats (This Week)'),
-    getSheet('This Week'),
+    getSheet('Stats (Current)'),
+    getSheet('Current'),
   ]);
   const [statsRows, thisWeekRows] = await Promise.all([
     stats.getRows(),

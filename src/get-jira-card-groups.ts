@@ -1,13 +1,6 @@
-import {
-  addIndex,
-  concat,
-  differenceWith,
-  equals,
-  groupBy,
-  keys,
-  map,
-} from 'ramda';
+import { addIndex, concat, differenceWith, equals, groupBy, map } from 'ramda';
 import jiraAPI from './lib/jira-api.js';
+import { Status } from './types';
 
 const developmentLoadFilter = `
   status = "In Progress"
@@ -22,19 +15,6 @@ const developmentLoadFilter = `
   OR status = "Ready for PROD Deploy"
   OR status = "To Do"
 `;
-
-type Status =
-  | 'In Progress'
-  | 'In Review'
-  | 'Merge In Dev'
-  | 'RFT'
-  | 'QA In Progress'
-  | 'QA Failed'
-  | 'UAT'
-  | 'Ready for PROD Deploy'
-  | 'RFT - PROD'
-  | 'RFT - PROD Fail'
-  | 'To Do';
 
 type Issue = {
   key: string;

@@ -2,7 +2,7 @@ import { map } from 'ramda';
 import getSheet from './lib/get-sheet.js';
 
 (async function () {
-  const sheet = await getSheet('This Week');
+  const sheet = await getSheet('Current');
   const rows = await sheet.getRows();
   await sheet.loadCells();
 

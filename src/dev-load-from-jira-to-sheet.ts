@@ -1,4 +1,4 @@
-import { differenceWith, equals, includes, map } from 'ramda';
+import { differenceWith, equals, findIndex, includes, map } from 'ramda';
 import getSheet from './lib/get-sheet.js';
 import jiraAPI from './lib/jira-api.js';
 
@@ -15,6 +15,21 @@ const developmentLoadFilter = `
   OR status = "Ready for PROD Deploy"
   OR status = "To Do"
 `;
+
+const statusOrder = [
+  'To Do',
+  'In Progress',
+  'In Review',
+  'Merge In Dev',
+  'RFT',
+  'QA In Progress',
+  'QA Failed',
+  'UAT',
+  'Ready for PROD Deploy',
+  'RFT - PROD',
+  'RFT - PROD Fail',
+  'Done',
+];
 
 (async function () {
   const [
@@ -42,7 +57,7 @@ const developmentLoadFilter = `
         jql: developmentLoadFilter,
       },
     }),
-    getSheet('This Week'),
+    getSheet('Current'),
   ]);
 
   const currentIssues = differenceWith(
@@ -76,6 +91,7 @@ const developmentLoadFilter = `
         ? 'QA'
         : '',
       assignee?.displayName || 'Unassigned',
+      findIndex((item: string) => item === status.name, statusOrder),
     ],
     currentIssues as {
       key: string;

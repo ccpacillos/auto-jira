@@ -4,6 +4,7 @@ import assertIssueOnBoard from './assert-issue-on-board.js';
 import getIssueDetails from './get-issue-details.js';
 import getIssueIdFromUrl from './get-issue-id-from-url.js';
 import getSheet from './get-sheet.js';
+import jiraAPI from './jira-api.js';
 
 export default async function updateSheetDetails(
   title: string,
@@ -110,6 +111,23 @@ export default async function updateSheetDetails(
 
       if (assertCardsToBoard) {
         await assertIssueOnBoard(issueId);
+      }
+
+      if (assignee?.accountId === '5eb4db627dab3a0bb43ee7e2') {
+        try {
+          await jiraAPI().request({
+            method: 'PUT',
+            url: `/rest/api/3/issue/${issueId}`,
+            data: {
+              fields: {
+                assignee: null,
+              },
+            },
+          });
+          issueAssignee.value = 'Unassigned';
+        } catch (error) {
+          console.log((error as any).response);
+        }
       }
     },
     { concurrency: 5 },
