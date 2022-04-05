@@ -1,8 +1,21 @@
+import { addIndex, map } from 'ramda';
 import jiraAPI from './lib/jira-api.js';
-import { Status } from './types.js';
+import { Issue, Status } from './types.js';
 
 function getStatusOrFilter(statuses: Status[]) {
   return statuses.map((status) => `status = "${status}"`).join(' OR ');
+}
+
+function toList(cards: Issue[], withStatus = false) {
+  return addIndex(map)(
+    (issue, index) =>
+      `  ${index + 1}. ${(issue as Issue).fields.summary} - ${
+        process.env.JIRA_URL
+      }/browse/${(issue as Issue).key}${
+        withStatus ? ` (${(issue as Issue).fields.status.name})` : ''
+      }`,
+    cards,
+  ).join('\n');
 }
 
 (async function (env: 'prod' | 'staging') {
@@ -19,5 +32,5 @@ function getStatusOrFilter(statuses: Status[]) {
     },
   });
 
-  console.log(issues.length);
+  console.log(toList(issues));
 })('prod');

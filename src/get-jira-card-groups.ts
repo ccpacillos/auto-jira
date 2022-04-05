@@ -1,6 +1,6 @@
 import { addIndex, concat, differenceWith, equals, groupBy, map } from 'ramda';
 import jiraAPI from './lib/jira-api.js';
-import { Status } from './types';
+import { Issue } from './types.js';
 
 const developmentLoadFilter = `
   status = "In Progress"
@@ -15,24 +15,6 @@ const developmentLoadFilter = `
   OR status = "Ready for PROD Deploy"
   OR status = "To Do"
 `;
-
-type Issue = {
-  key: string;
-  fields: {
-    summary: string;
-    status: {
-      name: Status;
-    };
-    assignee: { displayName: string } | null;
-    labels: string[];
-    priority: {
-      name: string;
-    };
-    issuetype: {
-      name: string;
-    };
-  };
-};
 
 function toList(cards: Issue[], withStatus = false) {
   return addIndex(map)(
@@ -102,6 +84,9 @@ ${toList(inDev, true)}
 
 For Release
 ${toList(forRelease, true)}
+
+QA Failed
+${toList(groups['QA Failed'])}
 
 RFT - PROD
 ${toList(groups['RFT - PROD'])}

@@ -10,3 +10,21 @@ export type Status =
   | 'RFT - PROD'
   | 'RFT - PROD Fail'
   | 'To Do';
+
+export type Issue = {
+  key: string;
+  fields: {
+    summary: string;
+    status: {
+      name: Status;
+    };
+    assignee: { displayName: string } | null;
+    labels: string[];
+    priority: {
+      name: string;
+    };
+    issuetype: {
+      name: string;
+    };
+  };
+};
