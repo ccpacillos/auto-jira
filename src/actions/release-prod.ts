@@ -1,6 +1,7 @@
 import Bluebird from 'bluebird';
+import { groupBy } from 'ramda';
 import jiraAPI from '../lib/jira-api.js';
-import { Status } from '../types.js';
+import { Issue, Status } from '../types.js';
 
 function getStatusOrFilter(statuses: Status[]) {
   return statuses.map((status) => `status = "${status}"`).join(' OR ');
@@ -14,9 +15,36 @@ function getStatusOrFilter(statuses: Status[]) {
     url: `/rest/agile/1.0/board/78/issue`,
     params: {
       maxResults: 1000,
-      jql: getStatusOrFilter(['UAT', 'Ready for PROD Deploy']),
+      jql: getStatusOrFilter([
+        'UAT',
+        'Ready for PROD Deploy',
+        'QA Failed',
+        'QA In Progress',
+        'RFT',
+      ]),
     },
   });
 
-  console.log(issues[0]);
+  const groups = groupBy((item: Issue) => item.fields.status.name)(issues);
+  await Bluebird.map(
+    [...(groups['UAT'] || []), ...(groups['Ready for PROD Deploy'] || [])],
+    async (issue) => {
+      try {
+        await jiraAPI().request({
+          method: 'PUT',
+          url: `rest/api/3/issue/${issue.key}`,
+          data: {
+            fields: {
+              status: { id: '10467' },
+            },
+          },
+        });
+      } catch (error) {
+        console.log((error as any).response);
+      }
+    },
+    { concurrency: 5 },
+  );
+
+  console.log;
 })();
