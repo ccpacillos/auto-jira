@@ -85,7 +85,7 @@ const statusOrder = [
           sheet.getCell(row.rowIndex - 1, 0).value ===
           `${process.env.JIRA_URL}/browse/${issue.key}`,
         sheetRows,
-      ),
+      ) && issue.fields.issuetype.name !== 'Epic',
     currentIssues,
   );
 

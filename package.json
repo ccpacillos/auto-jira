@@ -9,7 +9,8 @@
     "update-stats": "npm run ts-node src/actions/update-stats",
     "update-current": "npm run ts-node src/actions/update-current",
     "update-current-stats": "npm run ts-node src/actions/update-current-stats",
-    "update-done": "npm run ts-node src/actions/update-done"
+    "update-done": "npm run ts-node src/actions/update-done",
+    "add-missing-cards-to-sheet": "npm run ts-node src/actions/add-missing-cards-to-sheet"
   },
   "repository": {
     "type": "git",
