@@ -1,7 +1,7 @@
 export type Status =
   | 'In Progress'
   | 'In Review'
-  | 'Merge In Dev'
+  | 'Merged In Dev'
   | 'RFT'
   | 'QA In Progress'
   | 'QA Failed'

@@ -5,7 +5,7 @@ import jiraAPI from '../lib/jira-api.js';
 const developmentLoadFilter = `
   status = "In Progress"
   OR status = "In Review"
-  OR status = "Merge In Dev"
+  OR status = "Merged In Dev"
   OR status = "RFT"
   OR status = "QA In Progress"
   OR status = "QA Failed"
@@ -47,7 +47,7 @@ const developmentLoadFilter = `
   type Status =
     | 'In Progress'
     | 'In Review'
-    | 'Merge In Dev'
+    | 'Merged In Dev'
     | 'RFT'
     | 'QA In Progress'
     | 'QA Failed'
@@ -163,7 +163,7 @@ const developmentLoadFilter = `
         'To Do',
         'In Progress',
         'In Review',
-        'Merge In Dev',
+        'Merged In Dev',
         'RFT',
         'QA In Progress',
         'QA Failed',

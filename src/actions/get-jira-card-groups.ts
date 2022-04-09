@@ -1,11 +1,11 @@
 import { addIndex, concat, differenceWith, equals, groupBy, map } from 'ramda';
-import jiraAPI from './lib/jira-api.js';
-import { Issue, Status } from './types';
+import jiraAPI from '../lib/jira-api.js';
+import { Issue } from '../types';
 
 const developmentLoadFilter = `
   status = "In Progress"
   OR status = "In Review"
-  OR status = "Merge In Dev"
+  OR status = "Merged In Dev"
   OR status = "RFT"
   OR status = "QA In Progress"
   OR status = "QA Failed"
@@ -64,7 +64,7 @@ function toList(cards: Issue[], withStatus = false) {
 
   const groups = groupBy((issue) => issue.fields.status.name, currentIssues);
   let inDev = concat(groups['In Progress'] || [], groups['In Review'] || []);
-  inDev = concat(inDev, groups['Merge In Dev'] || []);
+  inDev = concat(inDev, groups['Merged In Dev'] || []);
   inDev = concat(inDev, groups['RFT'] || []);
   inDev = concat(inDev, groups['QA In Progress'] || []);
   inDev = concat(inDev, groups['QA Failed'] || []);

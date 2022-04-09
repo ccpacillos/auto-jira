@@ -14,7 +14,7 @@ function getStatusOrFilter(statuses: Status[]) {
     params: {
       maxResults: 1000,
       jql: getStatusOrFilter(
-        env === 'prod' ? ['UAT', 'Ready for PROD Deploy'] : ['Merge In Dev'],
+        env === 'prod' ? ['UAT', 'Ready for PROD Deploy'] : ['Merged In Dev'],
       ),
     },
   });
