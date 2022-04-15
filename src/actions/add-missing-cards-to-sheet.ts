@@ -7,8 +7,8 @@ import {
   includes,
   map,
 } from 'ramda';
-import getSheet from '../lib/get-sheet.js';
 import jiraAPI from '../lib/jira-api.js';
+import getSheet from '../lib/sheets/get-sheet.js';
 import { Issue } from '../types.js';
 
 const developmentLoadFilter = `

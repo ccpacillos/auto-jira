@@ -3,8 +3,8 @@ import { findIndex, includes, map } from 'ramda';
 import assertIssueOnBoard from './assert-issue-on-board.js';
 import getIssueDetails from './get-issue-details.js';
 import getIssueIdFromUrl from './get-issue-id-from-url.js';
-import getSheet from './get-sheet.js';
 import jiraAPI from './jira-api.js';
+import getSheet from './sheets/get-sheet.js';
 
 export default async function updateSheetDetails(
   title: string,

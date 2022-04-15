@@ -3,9 +3,9 @@ import getIssueDetails from './lib/get-issue-details.js';
 import jiraAPI from './lib/jira-api.js';
 
 (async function () {
-  const details = await getIssueDetails('EU-2010');
+  const details = await getIssueDetails('EU-4965', 'latest');
 
-  console.dir(details.fields.issuetype, { depth: null });
+  console.dir(details.fields, { depth: null });
 
   // const content =
   //   currentContent.length === 0

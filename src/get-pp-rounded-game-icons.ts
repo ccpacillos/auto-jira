@@ -1,7 +1,7 @@
 import Bluebird from 'bluebird';
 import { filter, find, includes, map } from 'ramda';
 import { createClient, FileStat } from 'webdav';
-import getSheet from './lib/get-sheet.js';
+import getSheet from './lib/sheets/get-sheet.js';
 
 const baseURL =
   'https://marketing.pragmaticplay.com/public.php/webdav/Marketing%20Materials/Materials%20%26%20Assets/Video%20Slots';

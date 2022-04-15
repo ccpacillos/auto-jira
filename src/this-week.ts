@@ -1,5 +1,5 @@
 import { map } from 'ramda';
-import getSheet from './lib/get-sheet.js';
+import getSheet from './lib/sheets/get-sheet.js';
 
 (async function () {
   const sheet = await getSheet('Current');

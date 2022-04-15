@@ -1,6 +1,6 @@
 import { differenceWith, equals, filter, groupBy, includes, map } from 'ramda';
-import getSheet from '../lib/get-sheet.js';
 import jiraAPI from '../lib/jira-api.js';
+import getSheet from '../lib/sheets/get-sheet.js';
 import updateSheetDetails from '../lib/update-sheet-details.js';
 
 const developmentLoadFilter = `
