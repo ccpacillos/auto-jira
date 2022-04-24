@@ -8,6 +8,7 @@ import { Issue } from '../types.js';
     status = "UAT"
     OR status = "Ready for PROD Deploy"
     OR status = "RFT - PROD"
+    OR status = "RFT"
   `;
 
   const [
@@ -47,10 +48,13 @@ import { Issue } from '../types.js';
 
   const markdown = `
 RFT - PROD:
-${toList(groups['RFT - PROD'])}
+${toList(groups['RFT - PROD'] || [])}
 
 UAT
-${toList(groups['UAT'])}
+${toList(groups['UAT'] || [])}
+
+RFT
+${toList(groups['RFT'] || [])}
   `;
 
   console.log(markdown);

@@ -11,7 +11,8 @@
     "update-current-stats": "npm run ts-node src/actions/update-current-stats",
     "update-done": "npm run ts-node src/actions/update-done",
     "add-missing-cards-to-sheet": "npm run ts-node src/actions/add-missing-cards-to-sheet",
-    "get-jira-card-groups": "npm run ts-node src/actions/get-jira-card-groups"
+    "get-jira-card-groups": "npm run ts-node src/actions/get-jira-card-groups",
+    "get-daily-update": "npm run ts-node src/actions/get-daily-update"
   },
   "repository": {
     "type": "git",
