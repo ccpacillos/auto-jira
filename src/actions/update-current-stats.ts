@@ -15,10 +15,11 @@ const developmentLoadFilter = `
   OR status = "RFT - PROD Fail"
   OR status = "Ready for PROD Deploy"
   OR status = "To Do"
+  AND type != "Epic"
 `;
 
 (async function () {
-  await updateSheetDetails('Current', true);
+  await updateSheetDetails('Current');
   console.log('Getting stats...');
   const [
     {

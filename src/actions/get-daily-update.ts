@@ -53,8 +53,16 @@ ${toList(groups['RFT - PROD'] || [])}
 UAT
 ${toList(groups['UAT'] || [])}
 
-RFT
-${toList(groups['RFT'] || [])}
+In QA:
+${toList([
+  ...(groups['RFT'] || []),
+  ...(groups['QA In Progress'] || []),
+  ...(groups['QA Failed'] || []),
+  ...(groups['UAT'] || []),
+])}
+
+Ready for Release:
+${toList(groups['Ready for PROD Deploy'] || [])}
   `;
 
   console.log(markdown);

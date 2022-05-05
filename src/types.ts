@@ -9,7 +9,8 @@ export type Status =
   | 'Ready for PROD Deploy'
   | 'RFT - PROD'
   | 'RFT - PROD Fail'
-  | 'To Do';
+  | 'To Do'
+  | 'Done';
 
 export type Issue = {
   key: string;
@@ -18,7 +19,7 @@ export type Issue = {
     status: {
       name: Status;
     };
-    assignee: { displayName: string } | null;
+    assignee: { displayName: string; accountId: string } | null;
     labels: string[];
     priority: {
       name: string;
@@ -26,5 +27,7 @@ export type Issue = {
     issuetype: {
       name: string;
     };
+    timeoriginalestimate: number;
+    customfield_10750: string;
   };
 };
