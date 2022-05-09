@@ -10,10 +10,10 @@
     "update-current": "npm run ts-node src/actions/update-current",
     "update-current-stats": "npm run ts-node src/actions/update-current-stats",
     "update-done": "npm run ts-node src/actions/update-done",
-    "add-missing-cards-to-sheet": "npm run ts-node src/actions/add-missing-cards-to-sheet",
     "get-jira-card-groups": "npm run ts-node src/actions/get-jira-card-groups",
     "get-daily-update": "npm run ts-node src/actions/get-daily-update",
-    "copy-done-this-month": "npm run ts-node src/actions/copy-done-this-month"
+    "copy-done-this-month": "npm run ts-node src/actions/copy-done-this-month",
+    "update-epic-metrics": "npm run ts-node src/update-epic-metrics"
   },
   "repository": {
     "type": "git",

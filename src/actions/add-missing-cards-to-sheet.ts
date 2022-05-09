@@ -40,7 +40,7 @@ const statusOrder = [
   'Done',
 ];
 
-(async function () {
+export async function addMissingCardsToSheet() {
   const [
     {
       data: { issues: allIssues },
@@ -120,4 +120,4 @@ const statusOrder = [
   );
 
   await sheet.addRows(rows);
-})();
+}

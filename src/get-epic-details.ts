@@ -88,12 +88,6 @@ export default async function getEpicDetails(key: string) {
       console.log(`Card ${issue.key} is potentially underestimated.`);
     }
 
-    // console.log(
-    //   `${issue.key}: estimate - ${
-    //     timeoriginalestimate * 3
-    //   }, codework - ${codework}`,
-    // );
-
     return codework > 0 ? codework : 0;
   };
 
@@ -110,7 +104,10 @@ export default async function getEpicDetails(key: string) {
   const activeAssignees = uniq(
     map(
       (issue: Issue) => issue.fields.assignee?.accountId,
-      filter(({ fields }) => !!fields.assignee, [...inToDo, ...inDev]),
+      filter(
+        ({ fields }) => !!fields.assignee,
+        [...inToDo, ...inDev, ...toBeReleased],
+      ),
     ),
   );
 

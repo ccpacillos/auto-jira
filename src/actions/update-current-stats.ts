@@ -2,6 +2,7 @@ import { differenceWith, equals, filter, groupBy, includes, map } from 'ramda';
 import jiraAPI from '../lib/jira-api.js';
 import getSheet from '../lib/sheets/get-sheet.js';
 import updateSheetDetails from '../lib/update-sheet-details.js';
+import { addMissingCardsToSheet } from './add-missing-cards-to-sheet.js';
 
 const developmentLoadFilter = `
   status = "In Progress"
@@ -19,6 +20,7 @@ const developmentLoadFilter = `
 `;
 
 (async function () {
+  await addMissingCardsToSheet();
   await updateSheetDetails('Current');
   console.log('Getting stats...');
   const [
