@@ -73,7 +73,6 @@ dt.setupBusiness({
         1;
 
       const etaDate = dt.startOf('day').plusBusiness({ days: eta });
-      console.log(sharedDueDateCell.value);
 
       if (sharedDueDateCell.value) {
         const diffBeforeDue =
