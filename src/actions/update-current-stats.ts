@@ -1,5 +1,6 @@
 import { differenceWith, equals, filter, groupBy, includes, map } from 'ramda';
 import jiraAPI from '../lib/jira-api.js';
+import logger from '../lib/logger.js';
 import getSheet from '../lib/sheets/get-sheet.js';
 import updateSheetDetails from '../lib/update-sheet-details.js';
 import { addMissingCardsToSheet } from './add-missing-cards-to-sheet.js';
@@ -22,7 +23,7 @@ const developmentLoadFilter = `
 (async function () {
   await addMissingCardsToSheet();
   await updateSheetDetails('Current');
-  console.log('Getting stats...');
+  logger.info('Getting stats...');
   const [
     {
       data: { issues: allIssues },
@@ -147,7 +148,7 @@ const developmentLoadFilter = `
 
   await stats.saveUpdatedCells();
 
-  console.log(
+  logger.info(
     map(
       (key) => {
         const fe = filter(
@@ -179,7 +180,7 @@ const developmentLoadFilter = `
       ],
     ).join('\n'),
   );
-  console.log(
+  logger.info(
     `Done: ${doneRows.length} (BE - ${beDone.length}, FE - ${feDone.length})`,
   );
 })();

@@ -8,6 +8,7 @@ import {
   map,
 } from 'ramda';
 import jiraAPI from '../lib/jira-api.js';
+import logger from '../lib/logger.js';
 import getSheet from '../lib/sheets/get-sheet.js';
 import { Issue } from '../types.js';
 
@@ -89,7 +90,7 @@ export async function addMissingCardsToSheet() {
     currentIssues,
   );
 
-  console.log({
+  logger.info({
     all: allIssues.length,
     backlog: backlogIssues.length,
     current: currentIssues.length,

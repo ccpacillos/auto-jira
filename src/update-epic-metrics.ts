@@ -4,6 +4,7 @@ import luxon from 'luxon-business-days';
 import { map } from 'ramda';
 import getBusinessDaysDiff from './get-business-days-diff.js';
 import getEpicDetails from './get-epic-details.js';
+import logger from './lib/logger.js';
 import getSheet from './lib/sheets/get-sheet.js';
 
 const { DateTime } = luxon;
@@ -56,7 +57,7 @@ dt.setupBusiness({
       const regexp = new RegExp('^https://identifi.atlassian.net/browse/(.*)$');
       const [, key] = linkCell.value.toString().match(regexp) || ['', ''];
 
-      console.log(`Updating epic card ${key}`);
+      logger.info(`Updating epic card ${key}`);
 
       const epicDetails = await getEpicDetails(key);
       titleCell.value = epicDetails.title;
