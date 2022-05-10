@@ -34,7 +34,7 @@ dt.setupBusiness({
     sheet.getCell(row.rowIndex - 1, column);
 
   await Bluebird.map(
-    [rows[0]],
+    [rows[0], rows[1], rows[2]],
     async (row) => {
       const [
         linkCell,
@@ -47,12 +47,14 @@ dt.setupBusiness({
         cardsDoneCell,
         activeDevelopersCell,
         etaCell,
-        sharedDueDateCell,
+        projectedDueDateCell,
         statusCell,
       ] = map(
         (column) => getCell(row, column),
         [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
       );
+
+      if (!linkCell.value) return;
 
       const regexp = new RegExp('^https://identifi.atlassian.net/browse/(.*)$');
       const [, key] = linkCell.value.toString().match(regexp) || ['', ''];
@@ -69,34 +71,40 @@ dt.setupBusiness({
       cardsDoneCell.value = epicDetails.cardsDone;
       activeDevelopersCell.value = epicDetails.activeAssignees;
 
-      const eta =
-        Math.ceil(epicDetails.remainingCodework / epicDetails.activeAssignees) -
-        1;
+      if (epicDetails.activeAssignees > 0) {
+        const eta =
+          Math.ceil(
+            epicDetails.remainingCodework / epicDetails.activeAssignees,
+          ) - 1;
 
-      const etaDate = dt.startOf('day').plusBusiness({ days: eta });
+        const etaDate = dt.startOf('day').plusBusiness({ days: eta });
 
-      if (sharedDueDateCell.value) {
-        const diffBeforeDue =
-          getBusinessDaysDiff(
-            etaDate,
-            DateTime.fromFormat(sharedDueDateCell.value, 'MMMM dd, yyyy'),
-          ) /
-          (24 * 60 * 60);
+        etaCell.value = `${etaDate.toFormat('MMMM dd, yyyy')}`;
 
-        if (diffBeforeDue > 2) {
-          statusCell.value = 'On Track';
+        if (projectedDueDateCell.value) {
+          const diffBeforeDue =
+            getBusinessDaysDiff(
+              etaDate,
+              DateTime.fromFormat(projectedDueDateCell.value, 'MMMM dd, yyyy'),
+            ) /
+            (24 * 60 * 60);
+
+          if (diffBeforeDue > 2) {
+            statusCell.value = 'On Track';
+          }
+
+          if (diffBeforeDue <= 2 && diffBeforeDue >= 0) {
+            statusCell.value = 'In Threat';
+          }
+
+          if (diffBeforeDue < 0) {
+            statusCell.value = 'Off Track';
+          }
         }
-
-        if (diffBeforeDue <= 2 && diffBeforeDue >= 0) {
-          statusCell.value = 'In Threat';
-        }
-
-        if (diffBeforeDue < 0) {
-          statusCell.value = 'Off Track';
-        }
+      } else {
+        etaCell.value = 'N/A';
+        statusCell.value = 'N/A';
       }
-
-      etaCell.value = `${etaDate.toFormat('MMMM dd, yyyy')}`;
     },
     { concurrency: 5 },
   );

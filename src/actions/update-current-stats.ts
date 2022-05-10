@@ -148,7 +148,7 @@ const developmentLoadFilter = `
 
   await stats.saveUpdatedCells();
 
-  logger.info(
+  console.log(
     map(
       (key) => {
         const fe = filter(
@@ -180,7 +180,7 @@ const developmentLoadFilter = `
       ],
     ).join('\n'),
   );
-  logger.info(
+  console.log(
     `Done: ${doneRows.length} (BE - ${beDone.length}, FE - ${feDone.length})`,
   );
 })();

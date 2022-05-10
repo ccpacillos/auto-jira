@@ -1,4 +1,5 @@
 import luxon from 'luxon-business-days';
+import logger from './lib/logger.js';
 
 const { DateTime } = luxon;
 
@@ -7,9 +8,10 @@ export default function getBusinessDaysDiff(
   to?: typeof DateTime,
 ) {
   const _to =
-    to || DateTime.now().isBusinessDay()
+    to ||
+    (DateTime.now().isBusinessDay()
       ? DateTime.now().startOf('day')
-      : DateTime.now().plusBusiness().startOf('day');
+      : DateTime.now().plusBusiness().startOf('day'));
 
   let dateCursor: typeof DateTime = from;
   let days = 0;
