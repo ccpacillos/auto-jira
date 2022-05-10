@@ -58,17 +58,19 @@ export default async function getEpicDetails(key: string) {
 
   const computeCodework = (issue: Issue) => {
     const {
-      fields: { timeoriginalestimate, customfield_10750: startDate },
+      fields: { timeoriginalestimate, customfield_10750: startDate, issuetype },
     } = issue;
 
-    if (!timeoriginalestimate) {
+    if (!timeoriginalestimate && issuetype.id !== '10272') {
       throw new Error(`No estimate has been set for card: ${issue.key}`);
     }
 
+    const estimate =
+      (issuetype.id === '10272' ? 28800 : timeoriginalestimate) * 3;
+
     const codework = startDate
-      ? timeoriginalestimate * 3 -
-        getBusinessDaysDiff(DateTime.fromISO(startDate))
-      : timeoriginalestimate * 3;
+      ? estimate - getBusinessDaysDiff(DateTime.fromISO(startDate))
+      : estimate;
 
     if (codework < 0) {
       console.log(`Card ${issue.key} is potentially underestimated.`);

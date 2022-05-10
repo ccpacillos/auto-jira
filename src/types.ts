@@ -26,6 +26,7 @@ export type Issue = {
     };
     issuetype: {
       name: string;
+      id: string;
     };
     timeoriginalestimate: number;
     customfield_10750: string;
