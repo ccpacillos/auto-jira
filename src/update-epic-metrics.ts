@@ -2,6 +2,7 @@ import Bluebird from 'bluebird';
 import { GoogleSpreadsheetRow } from 'google-spreadsheet';
 import luxon from 'luxon-business-days';
 import { map } from 'ramda';
+import getBusinessDaysDiff from './get-business-days-diff.js';
 import getEpicDetails from './get-epic-details.js';
 import getSheet from './lib/sheets/get-sheet.js';
 
@@ -45,7 +46,12 @@ dt.setupBusiness({
         cardsDoneCell,
         activeDevelopersCell,
         etaCell,
-      ] = map((column) => getCell(row, column), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        sharedDueDateCell,
+        statusCell,
+      ] = map(
+        (column) => getCell(row, column),
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      );
 
       const regexp = new RegExp('^https://identifi.atlassian.net/browse/(.*)$');
       const [, key] = linkCell.value.toString().match(regexp) || ['', ''];
@@ -66,12 +72,31 @@ dt.setupBusiness({
         Math.ceil(epicDetails.remainingCodework / epicDetails.activeAssignees) -
         1;
 
-      const etaDate = dt
-        .startOf('day')
-        .plusBusiness({ days: eta })
-        .toFormat('MMMM dd, yyyy');
+      const etaDate = dt.startOf('day').plusBusiness({ days: eta });
+      console.log(sharedDueDateCell.value);
 
-      etaCell.value = `${etaDate}`;
+      if (sharedDueDateCell.value) {
+        const diffBeforeDue =
+          getBusinessDaysDiff(
+            etaDate,
+            DateTime.fromFormat(sharedDueDateCell.value, 'MMMM dd, yyyy'),
+          ) /
+          (24 * 60 * 60);
+
+        if (diffBeforeDue > 2) {
+          statusCell.value = 'On Track';
+        }
+
+        if (diffBeforeDue <= 2 && diffBeforeDue >= 0) {
+          statusCell.value = 'In Threat';
+        }
+
+        if (diffBeforeDue < 0) {
+          statusCell.value = 'Off Track';
+        }
+      }
+
+      etaCell.value = `${etaDate.toFormat('MMMM dd, yyyy')}`;
     },
     { concurrency: 5 },
   );

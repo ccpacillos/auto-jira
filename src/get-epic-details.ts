@@ -1,5 +1,6 @@
 import luxon from 'luxon-business-days';
 import { filter, groupBy, map, sum, uniq } from 'ramda';
+import getBusinessDaysDiff from './get-business-days-diff.js';
 import getIssueDetails from './lib/get-issue-details.js';
 import jiraAPI from './lib/jira-api.js';
 import { Issue, Status } from './types.js';
@@ -64,24 +65,9 @@ export default async function getEpicDetails(key: string) {
       throw new Error(`No estimate has been set for card: ${issue.key}`);
     }
 
-    const getBusinessDaysBehind = (from: typeof DateTime) => {
-      const to = DateTime.now().isBusinessDay()
-        ? DateTime.now().startOf('day')
-        : DateTime.now().plusBusiness().startOf('day');
-
-      let dateCursor: typeof DateTime = from;
-      let days = 0;
-      while (to.diff(dateCursor).milliseconds > 0) {
-        dateCursor = dateCursor.plusBusiness();
-        days += 1;
-      }
-
-      return days * 24 * 60 * 60;
-    };
-
     const codework = startDate
       ? timeoriginalestimate * 3 -
-        getBusinessDaysBehind(DateTime.fromISO(startDate))
+        getBusinessDaysDiff(DateTime.fromISO(startDate))
       : timeoriginalestimate * 3;
 
     if (codework < 0) {
@@ -104,10 +90,7 @@ export default async function getEpicDetails(key: string) {
   const activeAssignees = uniq(
     map(
       (issue: Issue) => issue.fields.assignee?.accountId,
-      filter(
-        ({ fields }) => !!fields.assignee,
-        [...inToDo, ...inDev, ...toBeReleased],
-      ),
+      filter(({ fields }) => !!fields.assignee, [...inToDo, ...inDev]),
     ),
   );
 
