@@ -1,4 +1,3 @@
-import { GoogleSpreadsheetRow } from 'google-spreadsheet';
 import {
   addIndex,
   differenceWith,
@@ -24,7 +23,7 @@ const developmentLoadFilter = `
   OR status = "To Do"
 `;
 
-(async function () {
+export default async function getLoadMetrics() {
   const sortByDesignation = sortBy(prop('designation'));
   const developers = sortByDesignation(users);
 
@@ -53,7 +52,7 @@ const developmentLoadFilter = `
         jql: developmentLoadFilter,
       },
     }),
-    getSheet('Stats (Current)'),
+    getSheet('Load'),
   ]);
 
   const issues = groupBy(
@@ -73,7 +72,7 @@ const developmentLoadFilter = `
   mapIndexed((developer: any, index) => {
     const [developerCell, roleCell, activeCardsCell] = map(
       (column) => sheet.getCell(index + 1, column),
-      [3, 4, 5],
+      [0, 1, 2],
     );
 
     developerCell.value = developer.displayName;
@@ -82,4 +81,4 @@ const developmentLoadFilter = `
   }, developers);
 
   await sheet.saveUpdatedCells();
-})();
+}
