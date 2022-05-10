@@ -69,12 +69,13 @@ dt.setupBusiness({
       toBeReleasedCell.value = epicDetails.toBeReleased;
       releasedCell.value = epicDetails.released;
       cardsDoneCell.value = epicDetails.cardsDone;
-      activeDevelopersCell.value = epicDetails.activeAssignees;
 
-      if (epicDetails.activeAssignees > 0) {
+      activeDevelopersCell.value = epicDetails.activeAssignees.join(',\n');
+
+      if (epicDetails.activeAssignees.length > 0) {
         const eta =
           Math.ceil(
-            epicDetails.remainingCodework / epicDetails.activeAssignees,
+            epicDetails.remainingCodework / epicDetails.activeAssignees.length,
           ) - 1;
 
         const etaDate = dt.startOf('day').plusBusiness({ days: eta });

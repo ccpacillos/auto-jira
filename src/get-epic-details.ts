@@ -89,7 +89,7 @@ export default async function getEpicDetails(key: string) {
 
   const activeAssignees = uniq(
     map(
-      (issue: Issue) => issue.fields.assignee?.accountId,
+      (issue: Issue) => issue.fields.assignee?.displayName,
       filter(({ fields }) => !!fields.assignee, [...inToDo, ...inDev]),
     ),
   );
@@ -105,6 +105,6 @@ export default async function getEpicDetails(key: string) {
     remainingCodework,
     remainingCodeworkToDo,
     remainingCodeworkInDev,
-    activeAssignees: activeAssignees.length,
+    activeAssignees,
   };
 }
