@@ -5,7 +5,7 @@ import jiraAPI from './lib/jira-api.js';
 (async function () {
   const details = await getIssueDetails('EU-5520', 'latest');
 
-  console.dir(details.fields, { depth: null });
+  console.dir(details, { depth: null });
 
   // const content =
   //   currentContent.length === 0

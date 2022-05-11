@@ -30,5 +30,6 @@ export type Issue = {
     };
     timeoriginalestimate: number;
     customfield_10750: string;
+    parent?: { id: string; key: string };
   };
 };
