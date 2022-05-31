@@ -30,6 +30,10 @@ export type Issue = {
     };
     timeoriginalestimate: number;
     customfield_10750: string;
+    customfield_10799?: string; // date released
+    customfield_10800?: string; // start of cycle
+    customfield_10801?: string; // staging released
     parent?: { id: string; key: string };
+    resolutiondate?: string;
   };
 };

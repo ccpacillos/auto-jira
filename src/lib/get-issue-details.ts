@@ -1,3 +1,4 @@
+import { Issue } from '../types.js';
 import jiraAPI from './jira-api.js';
 
 export default async function getIssueDetails(id: string, apiVersion = '3') {
@@ -5,5 +6,5 @@ export default async function getIssueDetails(id: string, apiVersion = '3') {
     url: `/rest/api/${apiVersion}/issue/${id}`,
   });
 
-  return data;
+  return data as Issue;
 }

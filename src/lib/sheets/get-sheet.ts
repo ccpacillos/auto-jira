@@ -3,8 +3,10 @@ import { fileURLToPath } from 'url';
 import { GoogleSpreadsheet } from 'google-spreadsheet';
 import { loadJsonFile } from 'load-json-file';
 
-export default async function getSheet(title: string) {
-  const doc = new GoogleSpreadsheet(process.env.GOOGLE_SPREADSHEET_ID);
+export default async function getSheet(title: string, spreadsheetId?: string) {
+  const doc = new GoogleSpreadsheet(
+    spreadsheetId || process.env.GOOGLE_SPREADSHEET_ID,
+  );
   const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
   await doc.useServiceAccountAuth(

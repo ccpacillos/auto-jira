@@ -3,7 +3,7 @@ import getIssueDetails from './lib/get-issue-details.js';
 import jiraAPI from './lib/jira-api.js';
 
 (async function () {
-  const details = await getIssueDetails('EU-5520', 'latest');
+  const details = await getIssueDetails('EU-5561', 'latest');
 
   console.dir(details, { depth: null });
 

@@ -14,6 +14,7 @@ const developmentLoadFilter = `
   OR status = "RFT - PROD Fail"
   OR status = "Ready for PROD Deploy"
   OR status = "To Do"
+  and type != "Epic"
 `;
 
 const statusOrder = [
@@ -57,7 +58,7 @@ const statusOrder = [
         jql: developmentLoadFilter,
       },
     }),
-    getSheet('Current'),
+    getSheet('Board'),
   ]);
 
   const currentIssues = differenceWith(

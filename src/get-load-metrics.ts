@@ -1,14 +1,5 @@
-import {
-  addIndex,
-  differenceWith,
-  equals,
-  groupBy,
-  map,
-  prop,
-  sortBy,
-} from 'ramda';
+import { differenceWith, equals, groupBy, map, prop, sortBy } from 'ramda';
 import jiraAPI from './lib/jira-api.js';
-import getSheet from './lib/sheets/get-sheet.js';
 import { Issue } from './types.js';
 import users from './users.js';
 
@@ -23,7 +14,7 @@ const developmentLoadFilter = `
   OR status = "To Do"
 `;
 
-export default async function getLoadMetrics() {
+(async function getLoadMetrics() {
   const sortByDesignation = sortBy(prop('designation'));
   const developers = sortByDesignation(users);
 
@@ -34,7 +25,6 @@ export default async function getLoadMetrics() {
     {
       data: { issues: backlogIssues },
     },
-    sheet,
   ] = await Promise.all([
     jiraAPI().request({
       method: 'GET',
@@ -52,7 +42,6 @@ export default async function getLoadMetrics() {
         jql: developmentLoadFilter,
       },
     }),
-    getSheet('Load'),
   ]);
 
   const issues = groupBy(
@@ -65,20 +54,13 @@ export default async function getLoadMetrics() {
     ) as Issue[],
   );
 
-  await sheet.loadCells();
-
-  const mapIndexed = addIndex(map);
-
-  mapIndexed((developer: any, index) => {
-    const [developerCell, roleCell, activeCardsCell] = map(
-      (column) => sheet.getCell(index + 1, column),
-      [0, 1, 2],
+  map((developer: any) => {
+    console.log(
+      [
+        developer.displayName,
+        developer.designation,
+        issues[developer.accountId]?.length || 0,
+      ].join(' '),
     );
-
-    developerCell.value = developer.displayName;
-    roleCell.value = developer.designation;
-    activeCardsCell.value = issues[developer.accountId]?.length || 0;
   }, developers);
-
-  await sheet.saveUpdatedCells();
-}
+})();

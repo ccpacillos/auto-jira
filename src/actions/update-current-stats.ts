@@ -1,5 +1,4 @@
 import { differenceWith, equals, filter, groupBy, includes, map } from 'ramda';
-import getLoadMetrics from '../get-load-metrics.js';
 import jiraAPI from '../lib/jira-api.js';
 import logger from '../lib/logger.js';
 import getSheet from '../lib/sheets/get-sheet.js';
@@ -22,7 +21,7 @@ const developmentLoadFilter = `
 `;
 
 (async function () {
-  await Promise.all([getLoadMetrics(), addMissingCardsToSheet()]);
+  await addMissingCardsToSheet();
   await updateSheetDetails('Current');
 
   logger.info('Getting stats...');
