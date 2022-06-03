@@ -34,7 +34,7 @@ dt.setupBusiness({
     sheet.getCell(row.rowIndex - 1, column);
 
   await Bluebird.map(
-    [rows[0], rows[1], rows[2]],
+    [rows[1]],
     async (row) => {
       const [
         linkCell,
