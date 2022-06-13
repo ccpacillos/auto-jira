@@ -58,7 +58,7 @@ const statusOrder = [
         jql: developmentLoadFilter,
       },
     }),
-    getSheet('Board'),
+    getSheet('Current Load'),
   ]);
 
   const currentIssues = differenceWith(
@@ -82,16 +82,15 @@ const statusOrder = [
       `${process.env.JIRA_URL}/browse/${key}`,
       summary,
       status.name,
-      issuetype.name,
-      priority.name,
       includes('Frontend', labels)
         ? 'FE'
         : includes('Backend', labels)
         ? 'BE'
         : includes('QA', labels)
         ? 'QA'
+        : includes('Infra', labels)
+        ? 'Infra'
         : '',
-      assignee?.displayName || 'Unassigned',
       findIndex((item: string) => item === status.name, statusOrder),
     ],
     currentIssues as {

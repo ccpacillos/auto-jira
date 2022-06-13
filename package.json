@@ -44,6 +44,7 @@
     "typescript": "^4.6.2"
   },
   "dependencies": {
+    "@highoutput/async-group": "^0.5.0",
     "@highoutput/logger": "^0.5.10",
     "axios": "^0.26.1",
     "bluebird": "^3.7.2",
@@ -54,6 +55,7 @@
     "luxon-business-days": "^2.8.3",
     "ramda": "^0.28.0",
     "simple-statistics": "^7.7.5",
+    "slack-markdown": "^0.2.0",
     "slackify-markdown": "^4.3.1",
     "webdav": "^4.8.0"
   }

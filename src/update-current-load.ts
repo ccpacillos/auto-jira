@@ -20,7 +20,7 @@ const statusOrder = [
 ];
 
 (async function () {
-  const sheet = await getSheet('Weekly Targets');
+  const sheet = await getSheet('Current Load');
   const rows = await sheet.getRows();
   await sheet.loadCells();
 
@@ -28,7 +28,7 @@ const statusOrder = [
     rows,
     async (row) => {
       const index = row.rowIndex - 1;
-      const [issueLink, issueTitle, issueEpic, issueStatus, order] = map(
+      const [issueLink, issueTitle, issueStatus, , order] = map(
         (column: number) => sheet.getCell(index, column),
       )([0, 1, 2, 3, 4]);
 
@@ -39,13 +39,6 @@ const statusOrder = [
       );
 
       issueTitle.value = card.fields.summary;
-
-      if (card.fields.parent) {
-        const epic = await getIssueDetails(card.fields.parent.key);
-
-        issueEpic.value = epic.fields.summary;
-      }
-
       issueStatus.value = card.fields.status.name;
 
       order.value = findIndex(
