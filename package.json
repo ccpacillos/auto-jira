@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "@highoutput/async-group": "^0.5.0",
+    "@highoutput/delay": "^0.2.8",
     "@highoutput/logger": "^0.5.10",
     "axios": "^0.26.1",
     "bluebird": "^3.7.2",
@@ -53,6 +54,7 @@
     "load-json-file": "^7.0.1",
     "luxon": "^1.28.0",
     "luxon-business-days": "^2.8.3",
+    "mongodb-memory-server": "^8.7.0",
     "ramda": "^0.28.0",
     "simple-statistics": "^7.7.5",
     "slack-markdown": "^0.2.0",

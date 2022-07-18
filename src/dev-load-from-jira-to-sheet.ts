@@ -3,7 +3,7 @@ import jiraAPI from './lib/jira-api.js';
 import getSheet from './lib/sheets/get-sheet.js';
 
 const developmentLoadFilter = `
-  status = "In Progress"
+  (status = "In Progress"
   OR status = "In Review"
   OR status = "Merged In Dev"
   OR status = "RFT"
@@ -13,7 +13,7 @@ const developmentLoadFilter = `
   OR status = "RFT - PROD"
   OR status = "RFT - PROD Fail"
   OR status = "Ready for PROD Deploy"
-  OR status = "To Do"
+  OR status = "To Do")
   and type != "Epic"
 `;
 
