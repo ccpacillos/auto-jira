@@ -10,5 +10,6 @@ export default function jiraAPI() {
       username: process.env.JIRA_USERNAME || '',
       password: process.env.JIRA_PASSWORD || '',
     },
+    validateStatus: null,
   });
 }

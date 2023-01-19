@@ -1,4 +1,11 @@
-import { differenceWith, equals, findIndex, includes, map } from 'ramda';
+import {
+  differenceWith,
+  equals,
+  findIndex,
+  includes,
+  intersection,
+  map,
+} from 'ramda';
 import jiraAPI from './lib/jira-api.js';
 import getSheet from './lib/sheets/get-sheet.js';
 
@@ -82,13 +89,23 @@ const statusOrder = [
       `${process.env.JIRA_URL}/browse/${key}`,
       summary,
       status.name,
-      includes('Frontend', labels)
+      intersection(['Frontend', 'frontend', 'fe', 'FE'], labels).length > 0
         ? 'FE'
-        : includes('Backend', labels)
+        : intersection(['Backend', 'backend', 'be', 'BE'], labels).length > 0
         ? 'BE'
         : includes('QA', labels)
         ? 'QA'
-        : includes('Infra', labels)
+        : intersection(
+            [
+              'Infra',
+              'Infrastructure',
+              'infra',
+              'infrastructure',
+              'devops',
+              'DevOps',
+            ],
+            labels,
+          ).length > 0
         ? 'Infra'
         : '',
       findIndex((item: string) => item === status.name, statusOrder),
