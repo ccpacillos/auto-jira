@@ -10,7 +10,8 @@ export type Status =
   | 'RFT - PROD'
   | 'RFT - PROD Fail'
   | 'To Do'
-  | 'Done';
+  | 'Done'
+  | "Won't Fix";
 
 export type Issue = {
   key: string;
@@ -35,5 +36,6 @@ export type Issue = {
     customfield_10801?: string; // staging released
     parent?: { id: string; key: string };
     resolutiondate?: string;
+    created: string;
   };
 };

@@ -55,10 +55,12 @@
     "luxon": "^1.28.0",
     "luxon-business-days": "^2.8.3",
     "mongodb-memory-server": "^8.7.0",
+    "node-fetch": "^3.3.1",
     "ramda": "^0.28.0",
     "simple-statistics": "^7.7.5",
     "slack-markdown": "^0.2.0",
     "slackify-markdown": "^4.3.1",
+    "stats-percentile": "^3.3.0",
     "webdav": "^4.8.0"
   }
 }
